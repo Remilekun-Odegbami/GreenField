@@ -25,7 +25,7 @@ public class OnClickEvents : MonoBehaviour
     {
         gamePausedPanel.SetActive(true);
         buttonsPanel.SetActive(false);
-        changeNamePanel.SetActive(false);
+        changeNamePanel.SetActive(false); 
         Time.timeScale = 0;
         isGamePaused = true;
     }
@@ -84,6 +84,8 @@ public class OnClickEvents : MonoBehaviour
     public void Close()
     {
         leaderBoardPanel.SetActive(false);
+        aboutUsPanel.SetActive(false);
+        gamePausedPanel.SetActive(false) ;
         buttonsPanel.SetActive(true);
     }
 

@@ -10,7 +10,6 @@ public class PlayerManager : MonoBehaviour
     public TMP_InputField playerNameInput;
     public TextMeshProUGUI success;
     public TextMeshProUGUI error;
-    public TextMeshProUGUI enterName;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,12 +26,7 @@ public class PlayerManager : MonoBehaviour
     {
         LootLockerSDKManager.SetPlayerName(playerNameInput.text, (response) =>
         {
-            if(playerNameInput.text == "")
-            {
-                enterName.gameObject.SetActive(true);
-                return;
-            }
-            else if (playerNameInput.text != "" && response.success)
+            if (playerNameInput.text != "" && response.success)
             {
                 success.gameObject.SetActive(true);
             }
@@ -44,7 +38,7 @@ public class PlayerManager : MonoBehaviour
         });
     }
 
-    IEnumerator LoginRoutine()
+   public IEnumerator LoginRoutine()
     {
         bool done = false;
         LootLockerSDKManager.StartGuestSession((response) =>
@@ -70,7 +64,6 @@ public class PlayerManager : MonoBehaviour
     {
         success.gameObject.SetActive(false);
         error.gameObject.SetActive(false);
-        enterName.gameObject.SetActive(false);
     }
 
     public void ClearInput()

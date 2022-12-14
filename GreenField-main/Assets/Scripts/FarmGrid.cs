@@ -69,7 +69,6 @@ public class FarmGrid : MonoBehaviour
 
     public BarnEmpty barnEmpty;
     public GoldSystem GoldSystem;
-    private OnClickEvents onClick;
 
     public Text profitText;
     public static int profit;
@@ -102,7 +101,7 @@ public class FarmGrid : MonoBehaviour
 
     bool isDry;
 
-    public GameObject wetLandPanel;
+    public GameObject noMoneyPanel;
     public GameObject errorPanel;
 
 
@@ -122,7 +121,6 @@ public class FarmGrid : MonoBehaviour
 
         barnEmpty = GetComponent<BarnEmpty>();
         GoldSystem = GetComponent<GoldSystem>();
-        onClick = GetComponent<OnClickEvents>();
         // gameAudio = GetComponent<AudioSource>();
         image = GetComponent<SpriteRenderer>();
 
@@ -147,8 +145,6 @@ public class FarmGrid : MonoBehaviour
 
         // timer = GetComponent<Timer>();
         timerIsRunning = true;
-
-
     }
 
     // Update is called once per frame
@@ -211,6 +207,11 @@ public class FarmGrid : MonoBehaviour
 
                         errorPanel.SetActive(true);
                     }
+                else if (goldSystem.GetComponent<GoldSystem>().gold < Product.currentProductPrice)
+                {
+                    print("less");
+                        noMoneyPanel.SetActive(true);
+                }
                 }
 
                 // change harvested land to field
@@ -385,6 +386,7 @@ public class FarmGrid : MonoBehaviour
     public void Close()
     {
         barnEmpty.canvas.SetActive(false);
+        noMoneyPanel.SetActive(false);
         print("close");
     }
 
@@ -408,6 +410,9 @@ public class FarmGrid : MonoBehaviour
 
         Cursor.SetCursor(basicCursor, hotSpot, cursorMode);
         image.sprite = imageThree;
+
+
+        noMoneyPanel.SetActive(false);
     }
 
     public void WaterLand()

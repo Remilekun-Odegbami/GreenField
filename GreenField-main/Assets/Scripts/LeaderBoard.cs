@@ -9,6 +9,7 @@ public class LeaderBoard : MonoBehaviour
     int leaderBoardID = 9267;
     public TextMeshProUGUI playerNames;
     public TextMeshProUGUI playerScores;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,6 +45,7 @@ public class LeaderBoard : MonoBehaviour
     public IEnumerator FetchTopScores()
     {
         bool done = false;
+        
         // get top 10 players
         LootLockerSDKManager.GetScoreList(leaderBoardID, 10, 0, (response) =>
         {

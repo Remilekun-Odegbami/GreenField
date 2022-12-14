@@ -6,6 +6,7 @@ public class Barn : MonoBehaviour
 {
     public GameObject priceTable;
     public GameObject shop;
+
     public GameObject barnWindow;
 
     public string[] productName;

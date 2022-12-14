@@ -13,6 +13,7 @@ public class Shop : MonoBehaviour
     public GameObject shopWindow;
 
     public GameObject[] products;
+    public GoldSystem goldSystem;
 
     public int pageNumber;
 

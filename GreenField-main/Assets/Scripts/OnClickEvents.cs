@@ -60,6 +60,7 @@ public class OnClickEvents : MonoBehaviour
         aboutPanel.SetActive(false);
         buttonsPanel.SetActive(true);
         startMenuPanel.SetActive(false);
+        changeNamePanel.SetActive(false);
         Time.timeScale = 1;
         isGamePaused = false;
     }

@@ -10,6 +10,7 @@ public class PlayerManager : MonoBehaviour
     public TMP_InputField playerNameInput;
     public TextMeshProUGUI success;
     public TextMeshProUGUI error;
+    public TextMeshProUGUI enterName;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,14 +27,17 @@ public class PlayerManager : MonoBehaviour
     {
         LootLockerSDKManager.SetPlayerName(playerNameInput.text, (response) =>
         {
-            if (response.success)
+            if(playerNameInput.text == "")
             {
-                Debug.Log("Player name is set!");
+                enterName.gameObject.SetActive(true);
+                return;
+            }
+            else if (playerNameInput.text != "" && response.success)
+            {
                 success.gameObject.SetActive(true);
             }
             else
             {
-                Debug.Log("Player name not set " + response.Error);
                 error.gameObject.SetActive(true);
             }
 
@@ -66,6 +70,7 @@ public class PlayerManager : MonoBehaviour
     {
         success.gameObject.SetActive(false);
         error.gameObject.SetActive(false);
+        enterName.gameObject.SetActive(false);
     }
 
     public void ClearInput()

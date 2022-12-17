@@ -8,12 +8,17 @@ using UnityEngine.UI;
 public class FarmGrid : MonoBehaviour
 {
     public int columnLength, rowLength;
+    public int fieldPrice;
+    public int waterPrice;
+    public int harvestPrice;
+
     public float xSpace, zSpace;
 
     public GameObject grass;
     public GameObject[] currentGrid;
 
     public bool gotGrid;
+    bool isDry;
 
     public GameObject hitted;
     public GameObject wet_field;
@@ -21,6 +26,10 @@ public class FarmGrid : MonoBehaviour
     public GameObject soil;
     public GameObject grid;
     public GameObject water;
+    public GameObject noMoneyPanel;
+    public GameObject errorPanel;
+    public GameObject goldSystem;
+    public GameObject[] seeds;
 
     private RaycastHit _Hit;
 
@@ -31,13 +40,6 @@ public class FarmGrid : MonoBehaviour
     public CursorMode cursorMode = CursorMode.Auto;
     public Vector2 hotSpot = Vector2.zero;
 
-    public GameObject goldSystem;
-    public int fieldPrice;
-    public int waterPrice;
-    public int harvestPrice;
-
-    public GameObject[] seeds;
-
     public TextMeshProUGUI maizeHarvestText;
     public TextMeshProUGUI tomatoesHarvestText;
     public TextMeshProUGUI carrotHarvestText;
@@ -46,7 +48,6 @@ public class FarmGrid : MonoBehaviour
     public TextMeshProUGUI melonHarvestText;
     public TextMeshProUGUI cabbageHarvestText;
     public TextMeshProUGUI error;
-
 
     public static int maizeHarvest;
     public static int carrotHarvest;
@@ -64,14 +65,6 @@ public class FarmGrid : MonoBehaviour
     public static int melonHarvest2;
     public static int cabbageHarvest2;
 
-    public static int totalCropsInBarn;
-    public TextMeshProUGUI totalCropsInBarnText;
-
-    public BarnEmpty barnEmpty;
-    public GoldSystem GoldSystem;
-
-    public Text profitText;
-    public static int profit;
     public static int maizeHarvestProfit;
     public static int tomatoesHarvestProfit;
     public static int carrotHarvesProfit;
@@ -80,17 +73,16 @@ public class FarmGrid : MonoBehaviour
     public static int melonHarvestProfit;
     public static int cabbageHarvestProfit;
 
-    //private AudioSource gameAudio;
-    //public AudioClip gridSound;
-    //public AudioClip harvestSound;
-    //public AudioClip sowSound;
+    public static int totalCropsInBarn;
+    public static int profit;
 
 
-    public float timeRemaining = 20;
-    public bool timerIsRunning = false;
-    public TextMeshProUGUI timerText;
+    public TextMeshProUGUI totalCropsInBarnText;
+    public TextMeshProUGUI scoreText;
+    public Text profitText;
 
-
+    public BarnEmpty barnEmpty;
+    public GoldSystem GoldSystem;
     public LeaderBoard leaderBoard;
 
     public Sprite imageOne;
@@ -98,11 +90,6 @@ public class FarmGrid : MonoBehaviour
     public Sprite imageThree;
     public Sprite imageFour;
     public SpriteRenderer image;
-
-    bool isDry;
-
-    public GameObject noMoneyPanel;
-    public GameObject errorPanel;
 
 
     // public Timer timer;
@@ -120,8 +107,6 @@ public class FarmGrid : MonoBehaviour
         }
 
         barnEmpty = GetComponent<BarnEmpty>();
-        GoldSystem = GetComponent<GoldSystem>();
-        // gameAudio = GetComponent<AudioSource>();
         image = GetComponent<SpriteRenderer>();
 
         maizeHarvest = 1;
@@ -143,8 +128,8 @@ public class FarmGrid : MonoBehaviour
         totalCropsInBarn = 0;
 
 
-        // timer = GetComponent<Timer>();
-        timerIsRunning = true;
+        goldSystem.GetComponent<GoldSystem>().gold = PlayerPrefs.GetInt("gold");
+        profit = PlayerPrefs.GetInt("profit");
     }
 
     // Update is called once per frame
@@ -173,8 +158,8 @@ public class FarmGrid : MonoBehaviour
                         Destroy(hitted);
 
                         goldSystem.GetComponent<GoldSystem>().gold -= fieldPrice;
+                        PlayerPrefs.SetInt("gold", goldSystem.GetComponent<GoldSystem>().gold);
                     }
-                    // gameAudio.PlayOneShot(gridSound, 1.0f);
                 }
 
                 // water field
@@ -187,6 +172,7 @@ public class FarmGrid : MonoBehaviour
                         Destroy(hitted);
 
                         goldSystem.GetComponent<GoldSystem>().gold -= waterPrice;
+                        PlayerPrefs.SetInt("gold", goldSystem.GetComponent<GoldSystem>().gold);
                     }
                 }
 
@@ -201,6 +187,7 @@ public class FarmGrid : MonoBehaviour
                         Destroy(hitted);
 
                         goldSystem.GetComponent<GoldSystem>().gold -= Product.currentProductPrice;
+                        PlayerPrefs.SetInt("gold", goldSystem.GetComponent<GoldSystem>().gold);
                     }
                     else if (_Hit.transform.tag == "field" && goldSystem.GetComponent<GoldSystem>().gold >= Product.currentProductPrice)
                     {
@@ -209,7 +196,6 @@ public class FarmGrid : MonoBehaviour
                     }
                 else if (goldSystem.GetComponent<GoldSystem>().gold < Product.currentProductPrice)
                 {
-                    print("less");
                         noMoneyPanel.SetActive(true);
                 }
                 }
@@ -224,8 +210,8 @@ public class FarmGrid : MonoBehaviour
                         Instantiate(grid, hitted.transform.position, Quaternion.identity);
                         Destroy(hitted);
                         goldSystem.GetComponent<GoldSystem>().gold -= harvestPrice;
+                        PlayerPrefs.SetInt("gold", goldSystem.GetComponent<GoldSystem>().gold);
                     }
-                    //   gameAudio.PlayOneShot(harvestSound, 1.0f);
                 }
 
                 //HARVESTING SYSTEM
@@ -365,24 +351,6 @@ public class FarmGrid : MonoBehaviour
     }
 
 
-    public void StartTimer()
-    {
-        if (maizeHarvest >= 1 && timeRemaining > 0)
-        {
-            timeRemaining -= Time.deltaTime;
-            timerText.text = Mathf.Round(timeRemaining).ToString();
-            print(timeRemaining);
-            print(maizeHarvest);
-
-        }
-        else
-        {
-            print("Time out");
-            timerIsRunning = false;
-            timeRemaining = 0;
-        }
-    }
-
     public void Close()
     {
         barnEmpty.canvas.SetActive(false);
@@ -393,7 +361,6 @@ public class FarmGrid : MonoBehaviour
     public void CreateFields()
     {
         creatingFields = true;
-       // errorPanel.SetActive(true);
     }
 
     public void ReturnToNormality()
@@ -440,12 +407,15 @@ public class FarmGrid : MonoBehaviour
         if (maizeHarvest > 1)
         {
             goldSystem.GetComponent<GoldSystem>().gold += 40;
+            PlayerPrefs.SetInt("gold", goldSystem.GetComponent<GoldSystem>().gold);
             maizeHarvest--;
             maizeHarvest2--;
             maizeHarvestText.text = maizeHarvest2.ToString();
             maizeHarvestProfit += 10;
             profit += 10;
             profitText.text = "High Score: " + profit;
+            scoreText.text = "My Score: " + profit;
+            PlayerPrefs.SetInt("profit", profit);
             leaderBoard.SubmitScore(profit);
         }
         else if (maizeHarvest == 1 && maizeHarvest2 < 1)
@@ -459,12 +429,15 @@ public class FarmGrid : MonoBehaviour
         if (tomatoesHarvest > 1)
         {
             goldSystem.GetComponent<GoldSystem>().gold += 50;
+            PlayerPrefs.SetInt("gold", goldSystem.GetComponent<GoldSystem>().gold);
             tomatoesHarvest--;
             tomatoesHarvest2--;
             tomatoesHarvestText.text = tomatoesHarvest2.ToString();
             tomatoesHarvestProfit += 10;
             profit += 10;
             profitText.text = "High Score: " + profit;
+            scoreText.text = "My Score: " + profit;
+            PlayerPrefs.SetInt("profit", profit);
             leaderBoard.SubmitScore(profit);
         }
         else if (tomatoesHarvest == 1 && tomatoesHarvest2 < 1)
@@ -478,12 +451,15 @@ public class FarmGrid : MonoBehaviour
         if (carrotHarvest > 1)
         {
             goldSystem.GetComponent<GoldSystem>().gold += 60;
+            PlayerPrefs.SetInt("gold", goldSystem.GetComponent<GoldSystem>().gold);
             carrotHarvest--;
             carrotHarvest2--;
             carrotHarvestText.text = carrotHarvest2.ToString();
             carrotHarvesProfit += 10;
             profit += 10;
             profitText.text = "High Score: " + profit;
+            scoreText.text = "My Score: " + profit;
+            PlayerPrefs.SetInt("profit", profit);
             leaderBoard.SubmitScore(profit);
         }
         else if (carrotHarvest == 1 && carrotHarvest2 < 1)
@@ -497,12 +473,15 @@ public class FarmGrid : MonoBehaviour
         if (beetHarvest > 1)
         {
             goldSystem.GetComponent<GoldSystem>().gold += 70;
+            PlayerPrefs.SetInt("gold", goldSystem.GetComponent<GoldSystem>().gold);
             beetHarvest--;
             beetHarvest2--;
             beetHarvestText.text = beetHarvest2.ToString();
             beetHarvestProfit += 10;
             profit += 10;
             profitText.text = "High Score: " + profit;
+            scoreText.text = "My Score: " + profit;
+            PlayerPrefs.SetInt("profit", profit);
             leaderBoard.SubmitScore(profit);
         }
         else if (beetHarvest == 1 && beetHarvest2 < 1)
@@ -516,12 +495,15 @@ public class FarmGrid : MonoBehaviour
         if (bellHarvest > 1)
         {
             goldSystem.GetComponent<GoldSystem>().gold += 80;
+            PlayerPrefs.SetInt("gold", goldSystem.GetComponent<GoldSystem>().gold);
             bellHarvest--;
             bellHarvest2--;
             bellHarvestText.text = bellHarvest2.ToString();
             bellHarvestProfit += 10;
             profit += 10;
             profitText.text = "High Score: " + profit;
+            scoreText.text = "My Score: " + profit;
+            PlayerPrefs.SetInt("profit", profit);
             leaderBoard.SubmitScore(profit);
         }
         else if (bellHarvest == 1 && bellHarvest2 < 1)
@@ -535,12 +517,15 @@ public class FarmGrid : MonoBehaviour
         if (melonHarvest > 1)
         {
             goldSystem.GetComponent<GoldSystem>().gold += 90;
+            PlayerPrefs.SetInt("gold", goldSystem.GetComponent<GoldSystem>().gold);
             melonHarvest--;
             melonHarvest2--;
             melonHarvestText.text = melonHarvest2.ToString();
             melonHarvestProfit += 10;
             profit += 10;
             profitText.text = "High Score: " + profit;
+            scoreText.text = "My Score: " + profit;
+            PlayerPrefs.SetInt("profit", profit);
             leaderBoard.SubmitScore(profit);
         }
         else if (melonHarvest == 1 && melonHarvest2 < 1)
@@ -554,12 +539,15 @@ public class FarmGrid : MonoBehaviour
         if (cabbageHarvest > 1)
         {
             goldSystem.GetComponent<GoldSystem>().gold += 100;
+            PlayerPrefs.SetInt("gold", goldSystem.GetComponent<GoldSystem>().gold);
             cabbageHarvest--;
             cabbageHarvest2--;
             cabbageHarvestText.text = cabbageHarvest2.ToString();
             cabbageHarvestProfit += 10;
             profit += 10;
             profitText.text = "High Score: " + profit;
+            scoreText.text = "My Score: " + profit;
+            PlayerPrefs.SetInt("profit", profit);
             leaderBoard.SubmitScore(profit);
         }
         else if (cabbageHarvest == 1 && cabbageHarvest2 < 1)

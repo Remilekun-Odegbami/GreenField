@@ -8,6 +8,8 @@ public class Barn : MonoBehaviour
     public GameObject shop;
 
     public GameObject barnWindow;
+    public GameObject buttonsWindow;
+    public GameObject clearBarn;
 
     public string[] productName;
 
@@ -38,11 +40,15 @@ public class Barn : MonoBehaviour
     public void Close()
     {
         barnWindow.SetActive(false);
+        buttonsWindow.SetActive(true);
+        clearBarn.SetActive(false);
     }
 
     public void Open()
     {
         barnWindow.SetActive(true);
+        buttonsWindow.SetActive(false);
+        clearBarn.SetActive(false);
     }
 }
 

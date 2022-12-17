@@ -96,7 +96,7 @@ namespace EasyUI.PopUp
 
         public void ShowCabbage()
         {
-            PopUp.Instance.SetTitle("Interesting Facts About Kabeeji").SetMessage("Kabeeji, the Igbo name for Cabbage is also called kabeeji or efo oyinbo in Yoruba and kabeji in Hausa has a botanical name of 'brassica oleracea var. capitata'.\nThis cold-weather veggie with over 400 varieties is the oldest cultivated vegetable on record grown in China more than 6000 years ago.The most popular types are green, red, and Savoy varieties.\n It was used as medicine to cure headache, acne, baldness and to promote hair, skin and nails.\nThe red cabbage makes an excellent all natural dye for food and fabric.\nThis vegetable is loaded with a lot of vitamins and minerals which makes the body (and heart) healthy.").Show();
+            PopUp.Instance.SetTitle("Interesting Facts About Kabeeji").SetMessage("Kabeeji (cabbage in English) also called efo oyinbo in Yoruba, kabeeji in Igbo and kabeji in Hausa has a botanical name of 'brassica oleracea var. capitata'.\nThis cold-weather veggie with over 400 varieties is the oldest cultivated vegetable on record grown in China more than 6000 years ago.The most popular types are green, red, and Savoy varieties.\n It was used as medicine to cure headache, acne, baldness and to promote hair, skin and nails.\nThe red cabbage makes an excellent all natural dye for food and fabric.\nThis vegetable is loaded with a lot of vitamins and minerals which makes the body (and heart) healthy.").Show();
         }
 
     }

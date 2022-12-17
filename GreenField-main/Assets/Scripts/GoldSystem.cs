@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class GoldSystem : MonoBehaviour
 {
-    public int gold;
+    public int gold = 400;
 
     public Text goldText;
     public int totalCropsInBarn;
@@ -16,7 +16,10 @@ public class GoldSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        if (gold == 0)
+        {
+            gold += 400;
+        }
     }
 
     // Update is called once per frame

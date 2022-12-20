@@ -32,4 +32,9 @@ public class OpenLink : MonoBehaviour
     {
         Application.OpenURL("https://github.com/Jaybee02");
     }
+
+    public void OpenDemo()
+    {
+        Application.OpenURL("https://youtu.be/0vuDjmiiCzg");
+    }
 }
